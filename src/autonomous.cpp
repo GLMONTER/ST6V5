@@ -27,24 +27,6 @@ pros::vision_signature_s_t GR = pros::Vision::signature_from_utility(1, -2591, -
 pros::ADIUltrasonic frontR (F_R_O, F_R_Y);
 pros::ADIUltrasonic frontL(F_L_O, F_L_Y);
 //a function that alligns with the green part of the flag using the vision sensor, finds the largest green object on flags.
-static void testV()
-{
-	//basically resetting the vision sensor.
-	vSensor.clear_led();
-	//setting all of the signatures to an index that can be referenced later.
-	vSensor.set_signature(1, &GR);
-	vSensor.set_signature(2, &B_FLAG);
-	vSensor.set_signature(3, &R_FLAG);
-
-	//infinate loop so we can update the position of the vision object we find, for allignment.
-	while(true)
-	{
-		//get the largest object(0), from the first signature of the vision sensor.
-		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
-		std::cout<<rtn.x_middle_coord<<std::endl;
-	}
-}
 
 static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int MAX_RIGHT)
 {
@@ -61,9 +43,6 @@ static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int 
 		//we call this every update to get the new position of the object
 		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
 
-		std::cout<<rtn.x_middle_coord<<std::endl;
-		std::cout<<"LEft : "<<MAX_LEFT<<std::endl;
-		std::cout<<"right : "<<MAX_RIGHT<<std::endl;
 		//if it is within range, stop the motors.
 		if(!(rtn.x_middle_coord < MAX_LEFT) && !(rtn.x_middle_coord > MAX_RIGHT))
 		{
