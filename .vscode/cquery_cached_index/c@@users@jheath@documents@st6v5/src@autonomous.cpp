@@ -45,66 +45,27 @@ static void testV()
 		std::cout<<rtn.x_middle_coord<<std::endl;
 	}
 }
-static void readVB()
+
+static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int MAX_RIGHT)
 {
   //basically resetting the vision sensor.
 	vSensor.clear_led();
-  //setting all of the signatures to an index that can be referenced later.
-  vSensor.set_signature(1, &GR);
-  vSensor.set_signature(2, &B_FLAG);
-  vSensor.set_signature(3, &R_FLAG);
+
+  //set the blue signature to an index that can be referenced later.
+  vSensor.set_signature(0, &signature);
 
   //infinate loop so we can update the position of the vision object we find, for allignment.
 	while(true)
 	{
-		//get the largest object(0), from the first signature of the vision sensor.
+		//get the largest object(0), based on the signature passed in.
 		//we call this every update to get the new position of the object
 		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
 
+		std::cout<<rtn.x_middle_coord<<std::endl;
+		std::cout<<"LEft : "<<MAX_LEFT<<std::endl;
+		std::cout<<"right : "<<MAX_RIGHT<<std::endl;
 		//if it is within range, stop the motors.
-		if(!(rtn.x_middle_coord > 10) && !(rtn.x_middle_coord < 0))
-		{
-			rightMotB.move(0);
-			leftMotB.move(0);
-			break;
-		}
-		//if the object is to the left, then turn the robot left.
-		if(rtn.x_middle_coord < -5)
-		{
-			rightMotB.move(50);
-			leftMotB.move(-50);
-		}
-		else
-		{
-			//if the object is to the right, then turn the robot right.
-			if(rtn.x_middle_coord > 5)
-			{
-				rightMotB.move(-40);
-				leftMotB.move(40);
-			}
-		}
-		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(10);
-	}
-}
-static void readV()
-{
-  //basically resetting the vision sensor.
-	vSensor.clear_led();
-  //setting all of the signatures to an index that can be referenced later.
-  vSensor.set_signature(1, &GR);
-  vSensor.set_signature(2, &B_FLAG);
-  vSensor.set_signature(3, &R_FLAG);
-
-  //infinate loop so we can update the position of the vision object we find, for allignment.
-	while(true)
-	{
-		//get the largest object(0), from the first signature of the vision sensor.
-		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
-
-		//if it is within range, stop the motors.
-		if(!(rtn.x_middle_coord < -20) && !(rtn.x_middle_coord > -10))
+		if(!(rtn.x_middle_coord < MAX_LEFT) && !(rtn.x_middle_coord > MAX_RIGHT))
 		{
 			rightMotB.move(0);
 			leftMotB.move(0);
@@ -114,7 +75,7 @@ static void readV()
 			break;
 		}
 		//if the object is to the left, then turn the robot left.
-		if(rtn.x_middle_coord < -5)
+		if(rtn.x_middle_coord < MAX_LEFT)
 		{
 			rightMotB.move(50);
 			leftMotB.move(-50);
@@ -125,13 +86,13 @@ static void readV()
 		else
 		{
 			//if the object is to the right, then turn the robot right.
-			if(rtn.x_middle_coord > 5)
+			if(rtn.x_middle_coord > MAX_RIGHT)
 			{
-				rightMotB.move(-40);
-				leftMotB.move(40);
+				rightMotB.move(-60);
+				leftMotB.move(60);
 
-				rightMotF.move(-40);
-				leftMotF.move(40);
+				rightMotF.move(-60);
+				leftMotF.move(60);
 			}
 		}
 		//so we don't starv other tasks like updating the LCD
@@ -342,7 +303,7 @@ static void ALT_BLUE_C()
 //  Chassis.moveDistance(-2_in);
 	Chassis.moveDistance(3_ft);
 	//allign with the biggest green object on flag on the x coord.
-	readVB();
+	//readVB();
 
 	//reverse to make sure we didn't load to much and the ball will get caught in the fly wheel
 	loadR(100);
@@ -458,7 +419,7 @@ static void skillz()
   Chassis.turnAngle(-79_deg);
   Chassis.moveDistance(-2_in);
   //allign with the biggest green object on flag on the x coord.
-  readV();
+//  readV();
 
   //reverse to make sure we didn't load to much and the ball will get caught in the fly wheel
   loadR(100);
@@ -495,7 +456,7 @@ static void skillz()
   pros::Task::delay(100);
   Chassis.turnAngle(148_deg);
   loadR(100);
-  readV();
+//  readV();
   shoot(2000);
   load(1400);
 
@@ -519,8 +480,6 @@ void autonomous()
 {
 	while(true)
 	{
-		std::cout<<"LEft : "<<getLeft()<<std::endl;
-		std::cout<<"Right : "<<getRight()<<std::endl;
+		vision_READ(GR, -35, 15);
 	}
-	ALT_RED_C();
 }
