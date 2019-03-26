@@ -13,6 +13,7 @@
  * from where it left off.
  */
 
+
 using namespace okapi;
 
 //the actaull signature data from the vision sensor utility.
@@ -71,33 +72,32 @@ static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int 
 		pros::Task::delay(10);
 	}
 }
+//finds the differnce between either the back or front 2 ultrasonic sensors
 static int getDif(int side)
 {
 	int ret = 0;
 
-	pros::Task::delay(50);
 	if(side == 0)
 	{
 		ret += frontR.get_value();
-	}
-	else
-	{
-		ret += backR.get_value();
-	}
-	pros::Task::delay(50);
-	if(side == 0)
-	{
+		//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
+		pros::Task::delay(50);
 		ret -= frontL.get_value();
 	}
 	else
 	{
+		ret += backR.get_value();
+		//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
+		pros::Task::delay(50);
 		ret -= backL.get_value();
 	}
 	return std::abs(ret);
 }
 
-static int getLeft(int side)
+//gets the left ultrasonic sensor value either on back or front
+static int getLeft(enum Sides side)
 {
+	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
 	pros::Task::delay(50);
 	if(side == 0)
 	{
@@ -108,9 +108,10 @@ static int getLeft(int side)
 		return backL.get_value();
 	}
 }
-
+//gets the right ultrasonic sensor value either on back or front
 static int getRight(int side)
 {
+	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
 	pros::Task::delay(50);
 	if(side == 0)
 	{
@@ -122,20 +123,20 @@ static int getRight(int side)
 	}
 
 }
-
+//allign with the ultrasonic sensors facing the back
 static void allignBackH()
 {
 	while(true)
   {
-		std::cout<<"left : "<<getLeft(1)<<std::endl;
-		std::cout<<"right : "<<getRight(1)<<std::endl;
+		std::cout<<"left : "<<getLeft(Sides::Back)<<std::endl;
+		std::cout<<"right : "<<getRight(Sides::Back)<<std::endl;
     if(getDif(1) < 40)
     {
         break;
     }
     else
     {
-      if(getRight(1) > getLeft(1))
+      if(getRight(Sides::Back) > getLeft(Sides::Back))
       {
         rightMotB.move(-50);
         leftMotB.move(50);
@@ -160,13 +161,13 @@ static void allignFront(int dis)
 {
   while(true)
   {
-    if(getDif(0) < 50)
+    if(getDif(Sides::Front) < 50)
     {
         break;
     }
     else
     {
-      if(getRight(0) > getLeft(0))
+      if(getRight(Sides::Front) > getLeft(Sides::Front))
       {
         rightMotB.move(50);
         leftMotB.move(-50);
@@ -189,7 +190,7 @@ static void allignFront(int dis)
 	int temp;
   while(std::abs(temp - dis) > 100)
   {
-    temp = ((getRight(0) + getLeft(0)) / 2);
+    temp = ((getRight(Sides::Front) + getLeft(Sides::Front)) / 2);
 
     if(temp > dis)
     {
@@ -265,7 +266,8 @@ static void allignFront(int dis)
    fly2.move_velocity(600);
    pros::Task::delay(mili);
  }
-//the robot chassis
+
+//the robot chassis, okapi lib uses this data for the Chassis functions like moveDistance
  static auto Chassis = ChassisControllerFactory::create
  (
    //left drive train

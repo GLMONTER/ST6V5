@@ -83,6 +83,10 @@ extern pros::Motor rightMotB;
 extern pros::Motor fly;
 extern pros::Motor fly2;
 
+//for the ultrasonic functions instead of remembering numbers
+enum Sides {Front = 0, Back = 1};
+
+//these are for the ultrasonic ADI ports, F_R_O meaning front right orange cable, and F_R_Y meaning front right yellow cable ect.
 #define F_R_O 3
 #define F_R_Y 4
 
@@ -94,8 +98,6 @@ extern pros::Motor fly2;
 
 #define B_L_O 5
 #define B_L_Y 6
-
-extern pros::ADIGyro gyro;
 
 void autonomous(void);
 void initialize(void);
