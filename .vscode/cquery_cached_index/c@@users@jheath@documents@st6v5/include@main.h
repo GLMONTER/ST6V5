@@ -63,12 +63,14 @@ extern "C" {
 #endif
 
 extern pros::Controller mController;
+
 extern pros::Vision vSensor;
 
+extern pros::Motor LoadServ;
 extern pros::Motor LoadServ2;
+
 extern pros::Motor leftMotF;
 extern pros::Motor leftMotB;
-
 extern pros::Motor rightMotF;
 extern pros::Motor rightMotB;
 
@@ -81,8 +83,7 @@ extern pros::Motor fly2;
 #define F_L_O 1
 #define F_L_Y 2
 
-
-extern pros::Motor LoadServ;
+extern pros::ADIGyro gyro;
 
 void autonomous(void);
 void initialize(void);

@@ -159,9 +159,12 @@ bool rev = false;
 //the driving code
 void driveControl()
 {
+		pros::ADILightSensor i('f');
+	pros::ADIGyro gyro('E');
 //infinite loop to keep the driving code going.
  while(true)
  {
+	 std::cout<<i.get_value()<<std::endl;
 	 //the toggle for reversing the drive train
 	 if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 	 {

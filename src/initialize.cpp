@@ -5,7 +5,11 @@
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {}
+void initialize()
+{
+  LoadServ.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  LoadServ2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+}
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
