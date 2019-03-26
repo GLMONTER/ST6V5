@@ -66,6 +66,12 @@ extern pros::Controller mController;
 
 extern pros::Vision vSensor;
 
+extern pros::ADIUltrasonic backR;
+extern pros::ADIUltrasonic backL;
+
+extern pros::ADIUltrasonic frontR;
+extern pros::ADIUltrasonic frontL;
+
 extern pros::Motor LoadServ;
 extern pros::Motor LoadServ2;
 
@@ -82,6 +88,12 @@ extern pros::Motor fly2;
 
 #define F_L_O 1
 #define F_L_Y 2
+
+#define B_R_O 7
+#define B_R_Y 8
+
+#define B_L_O 5
+#define B_L_Y 6
 
 extern pros::ADIGyro gyro;
 

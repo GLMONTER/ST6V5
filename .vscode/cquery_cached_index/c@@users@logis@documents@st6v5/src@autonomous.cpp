@@ -13,16 +13,31 @@
  * from where it left off.
  */
 
+
+
 using namespace okapi;
+
+//for checking the error state of errno fo debugging.
+extern int errno;
 
 //the actaull signature data from the vision sensor utility.
 pros::vision_signature_s_t B_FLAG = pros::Vision::signature_from_utility(2, -3469, -2519, -2994, 11367, 14763, 13064, 5.9, 0);
 pros::vision_signature_s_t R_FLAG = pros::Vision::signature_from_utility(1, 7505, 11963, 9734, -541, 1, -270, 3.5, 0);
 
+pros::ADIUltrasonic frontR (F_R_O, F_R_Y);
+pros::ADIUltrasonic frontL(F_L_O, F_L_Y);
+
+pros::ADIUltrasonic backR ('G', 'H');
+pros::ADIUltrasonic backL('E', 'F');
+
 //a function that alligns with the green part of the flag using the vision sensor, finds the largest green object on flags.
 
 static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int MAX_RIGHT)
 {
+	leftMotF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	leftMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rightMotF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rightMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   //basically resetting the vision sensor.
 	vSensor.clear_led();
   //set the blue signature to an index that can be referenced later.
@@ -33,7 +48,7 @@ static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int 
 	{
 		//get the largest object(0), based on the signature passed in.
 		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 0);
+		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
 
 		std::cout<<"value : "<<rtn.x_middle_coord<<std::endl;
 		//if it is within range, stop the motors.
@@ -73,6 +88,8 @@ static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int 
 }
 static int getDif(int side)
 {
+	pros::ADIUltrasonic backR ('G', 'H');
+	pros::ADIUltrasonic backL('E', 'F');
 	int ret = 0;
 
 	pros::Task::delay(50);
@@ -98,6 +115,8 @@ static int getDif(int side)
 
 static int getLeft(int side)
 {
+	pros::ADIUltrasonic backR ('G', 'H');
+	pros::ADIUltrasonic backL('E', 'F');
 	pros::Task::delay(50);
 	if(side == 0)
 	{
@@ -111,6 +130,8 @@ static int getLeft(int side)
 
 static int getRight(int side)
 {
+	pros::ADIUltrasonic backR ('G', 'H');
+	pros::ADIUltrasonic backL('E', 'F');
 	pros::Task::delay(50);
 	if(side == 0)
 	{
