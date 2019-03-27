@@ -1,6 +1,7 @@
 #include "main.h"
 //for std::abs
 #include<cstdlib>
+#include"sensors.hpp"
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -12,210 +13,10 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-
-
-using namespace okapi;
-
-//the actaull signature data from the vision sensor utility.
 pros::vision_signature_s_t B_FLAG = pros::Vision::signature_from_utility(2, -3469, -2519, -2994, 11367, 14763, 13064, 5.9, 0);
 pros::vision_signature_s_t R_FLAG = pros::Vision::signature_from_utility(1, 7505, 11963, 9734, -541, 1, -270, 3.5, 0);
 
-//a function that alligns with the green part of the flag using the vision sensor, finds the largest green object on flags.
-
-static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int MAX_RIGHT)
-{
-  //basically resetting the vision sensor.
-	vSensor.clear_led();
-  //set the blue signature to an index that can be referenced later.
-  vSensor.set_signature(0, &signature);
-
-  //infinate loop so we can update the position of the vision object we find, for allignment.
-	while(true)
-	{
-		//get the largest object(0), based on the signature passed in.
-		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 0);
-
-		std::cout<<"value : "<<rtn.x_middle_coord<<std::endl;
-		//if it is within range, stop the motors.
-		if(!(rtn.x_middle_coord < MAX_LEFT) && !(rtn.x_middle_coord > MAX_RIGHT))
-		{
-			rightMotB.move_velocity(0);
-			leftMotB.move_velocity(0);
-
-			rightMotF.move_velocity(0);
-			leftMotF.move_velocity(0);
-			break;
-		}
-		//if the object is to the left, then turn the robot left.
-		if(rtn.x_middle_coord < MAX_LEFT)
-		{
-			rightMotB.move(40);
-			leftMotB.move(-40);
-
-			rightMotF.move(40);
-			leftMotF.move(-40);
-		}
-		else
-		{
-			//if the object is to the right, then turn the robot right.
-			if(rtn.x_middle_coord > MAX_RIGHT)
-			{
-				rightMotB.move(-40);
-				leftMotB.move(40);
-
-				rightMotF.move(-40);
-				leftMotF.move(40);
-			}
-		}
-		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(10);
-	}
-}
-//finds the differnce between either the back or front 2 ultrasonic sensors
-static int getDif(int side)
-{
-	int ret = 0;
-
-	if(side == 0)
-	{
-		ret += frontR.get_value();
-		//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
-		pros::Task::delay(50);
-		ret -= frontL.get_value();
-	}
-	else
-	{
-		ret += backR.get_value();
-		//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
-		pros::Task::delay(50);
-		ret -= backL.get_value();
-	}
-	return std::abs(ret);
-}
-
-//gets the left ultrasonic sensor value either on back or front
-static int getLeft(enum Sides side)
-{
-	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		return frontL.get_value();
-	}
-	else
-	{
-		return backL.get_value();
-	}
-}
-//gets the right ultrasonic sensor value either on back or front
-static int getRight(int side)
-{
-	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		return frontR.get_value();
-	}
-	else
-	{
-		return backR.get_value();
-	}
-
-}
-//allign with the ultrasonic sensors facing the back
-static void allignBackH()
-{
-	while(true)
-  {
-		std::cout<<"left : "<<getLeft(Sides::Back)<<std::endl;
-		std::cout<<"right : "<<getRight(Sides::Back)<<std::endl;
-    if(getDif(1) < 40)
-    {
-        break;
-    }
-    else
-    {
-      if(getRight(Sides::Back) > getLeft(Sides::Back))
-      {
-        rightMotB.move(-50);
-        leftMotB.move(50);
-      }
-      else
-      {
-        rightMotB.move(50);
-        leftMotB.move(-50);
-      }
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-}
-
-//a test function for using the ultrasonic sensor to line the robot up without hitting a wall.
-static void allignFront(int dis)
-{
-  while(true)
-  {
-    if(getDif(Sides::Front) < 50)
-    {
-        break;
-    }
-    else
-    {
-      if(getRight(Sides::Front) > getLeft(Sides::Front))
-      {
-        rightMotB.move(50);
-        leftMotB.move(-50);
-      }
-      else
-      {
-        rightMotB.move(-50);
-        leftMotB.move(50);
-      }
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-
-
-	int temp;
-  while(std::abs(temp - dis) > 100)
-  {
-    temp = ((getRight(Sides::Front) + getLeft(Sides::Front)) / 2);
-
-    if(temp > dis)
-    {
-      leftMotB.move(40);
-      leftMotF.move(40);
-
-      rightMotB.move(40);
-      rightMotF.move(40);
-    }
-    else
-    {
-      leftMotB.move(-40);
-      leftMotF.move(-40);
-
-      rightMotB.move(-40);
-      rightMotF.move(-40);
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-}
+using namespace okapi;
 
 //load forever until stopped with stopLoader() or manually.
  static void loadf()
@@ -352,7 +153,6 @@ static void ALT_BLUE_C()
 	Chassis.moveDistance(28_in);
 }
 
-
 //start at red and move to gray, move forward to back of next tick
 static void ALT_RED_C()
 {
@@ -418,9 +218,6 @@ static void farBlue()
   */
 }
 //start front of first tick, farthest from flag
-
-
-
 
 //back of second tick
 static void skillz()

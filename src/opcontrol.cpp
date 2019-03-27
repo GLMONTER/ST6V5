@@ -1,4 +1,5 @@
 #include "main.h"
+#include"sensors.hpp"
 /**
 * Runs the operator control code. This function will be started in its own task
 * with the default priority and stack size whenever the robot is enabled via
@@ -12,6 +13,9 @@
 * operator control task will be stopped. Re-enabling the robot will restart the
 * task, not resume it from where it left off.
 */
+
+pros::vision_signature_s_t B_FLAG_D = pros::Vision::signature_from_utility(2, -3469, -2519, -2994, 11367, 14763, 13064, 5.9, 0);
+pros::vision_signature_s_t R_FLAG_D = pros::Vision::signature_from_utility(1, 7505, 11963, 9734, -541, 1, -270, 3.5, 0);
 
 //toggle and press bool for forward motion of drum
 int buttonToggleF = 0;
@@ -193,7 +197,5 @@ void driveControl()
 //operator control entry point
 void opcontrol()
 {
-	//actually set the signature from the data we collected from the vision utility.
-	//set the data to index of 1 to reference later.
   driveControl();
 }
