@@ -1,6 +1,7 @@
 #include "main.h"
 //for std::abs
 #include<cstdlib>
+#include"sensors.hpp"
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -12,230 +13,10 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-
-
-
-using namespace okapi;
-
-//for checking the error state of errno fo debugging.
-extern int errno;
-
-//the actaull signature data from the vision sensor utility.
 pros::vision_signature_s_t B_FLAG = pros::Vision::signature_from_utility(2, -3469, -2519, -2994, 11367, 14763, 13064, 5.9, 0);
 pros::vision_signature_s_t R_FLAG = pros::Vision::signature_from_utility(1, 7505, 11963, 9734, -541, 1, -270, 3.5, 0);
 
-pros::ADIUltrasonic frontR (F_R_O, F_R_Y);
-pros::ADIUltrasonic frontL(F_L_O, F_L_Y);
-
-pros::ADIUltrasonic backR ('G', 'H');
-pros::ADIUltrasonic backL('E', 'F');
-
-//a function that alligns with the green part of the flag using the vision sensor, finds the largest green object on flags.
-
-static void vision_READ(pros::vision_signature_s_t signature, int MAX_LEFT, int MAX_RIGHT)
-{
-	leftMotF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	leftMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	rightMotF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	rightMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-  //basically resetting the vision sensor.
-	vSensor.clear_led();
-  //set the blue signature to an index that can be referenced later.
-  vSensor.set_signature(0, &signature);
-
-  //infinate loop so we can update the position of the vision object we find, for allignment.
-	while(true)
-	{
-		//get the largest object(0), based on the signature passed in.
-		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, 1);
-
-		std::cout<<"value : "<<rtn.x_middle_coord<<std::endl;
-		//if it is within range, stop the motors.
-		if(!(rtn.x_middle_coord < MAX_LEFT) && !(rtn.x_middle_coord > MAX_RIGHT))
-		{
-			rightMotB.move_velocity(0);
-			leftMotB.move_velocity(0);
-
-			rightMotF.move_velocity(0);
-			leftMotF.move_velocity(0);
-			break;
-		}
-		//if the object is to the left, then turn the robot left.
-		if(rtn.x_middle_coord < MAX_LEFT)
-		{
-			rightMotB.move(40);
-			leftMotB.move(-40);
-
-			rightMotF.move(40);
-			leftMotF.move(-40);
-		}
-		else
-		{
-			//if the object is to the right, then turn the robot right.
-			if(rtn.x_middle_coord > MAX_RIGHT)
-			{
-				rightMotB.move(-40);
-				leftMotB.move(40);
-
-				rightMotF.move(-40);
-				leftMotF.move(40);
-			}
-		}
-		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(10);
-	}
-}
-static int getDif(int side)
-{
-	pros::ADIUltrasonic backR ('G', 'H');
-	pros::ADIUltrasonic backL('E', 'F');
-	int ret = 0;
-
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		ret += frontR.get_value();
-	}
-	else
-	{
-		ret += backR.get_value();
-	}
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		ret -= frontL.get_value();
-	}
-	else
-	{
-		ret -= backL.get_value();
-	}
-	return std::abs(ret);
-}
-
-static int getLeft(int side)
-{
-	pros::ADIUltrasonic backR ('G', 'H');
-	pros::ADIUltrasonic backL('E', 'F');
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		return frontL.get_value();
-	}
-	else
-	{
-		return backL.get_value();
-	}
-}
-
-static int getRight(int side)
-{
-	pros::ADIUltrasonic backR ('G', 'H');
-	pros::ADIUltrasonic backL('E', 'F');
-	pros::Task::delay(50);
-	if(side == 0)
-	{
-		return frontR.get_value();
-	}
-	else
-	{
-		return backR.get_value();
-	}
-
-}
-
-static void allignBackH()
-{
-	while(true)
-  {
-		std::cout<<"left : "<<getLeft(1)<<std::endl;
-		std::cout<<"right : "<<getRight(1)<<std::endl;
-    if(getDif(1) < 40)
-    {
-        break;
-    }
-    else
-    {
-      if(getRight(1) > getLeft(1))
-      {
-        rightMotB.move(-50);
-        leftMotB.move(50);
-      }
-      else
-      {
-        rightMotB.move(50);
-        leftMotB.move(-50);
-      }
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-}
-
-//a test function for using the ultrasonic sensor to line the robot up without hitting a wall.
-static void allignFront(int dis)
-{
-  while(true)
-  {
-    if(getDif(0) < 50)
-    {
-        break;
-    }
-    else
-    {
-      if(getRight(0) > getLeft(0))
-      {
-        rightMotB.move(50);
-        leftMotB.move(-50);
-      }
-      else
-      {
-        rightMotB.move(-50);
-        leftMotB.move(50);
-      }
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-
-
-	int temp;
-  while(std::abs(temp - dis) > 100)
-  {
-    temp = ((getRight(0) + getLeft(0)) / 2);
-
-    if(temp > dis)
-    {
-      leftMotB.move(40);
-      leftMotF.move(40);
-
-      rightMotB.move(40);
-      rightMotF.move(40);
-    }
-    else
-    {
-      leftMotB.move(-40);
-      leftMotF.move(-40);
-
-      rightMotB.move(-40);
-      rightMotF.move(-40);
-    }
-    pros::Task::delay(10);
-  }
-  leftMotB.move(0);
-  leftMotF.move(0);
-
-  rightMotB.move(0);
-  rightMotF.move(0);
-}
+using namespace okapi;
 
 //load forever until stopped with stopLoader() or manually.
  static void loadf()
@@ -286,7 +67,15 @@ static void allignFront(int dis)
    fly2.move_velocity(600);
    pros::Task::delay(mili);
  }
-//the robot chassis
+
+ static void shootS(std::uint32_t mili, int speed)
+ {
+   fly.move_velocity(speed);
+   fly2.move_velocity(speed);
+   pros::Task::delay(mili);
+ }
+
+//the robot chassis, okapi lib uses this data for the Chassis functions like moveDistance
  static auto Chassis = ChassisControllerFactory::create
  (
    //left drive train
@@ -300,146 +89,79 @@ static void allignFront(int dis)
  );
 
 
-//front of second tick, far from flag.
-static void farRed()
+static void FAR_RED()
 {
-  Chassis.moveDistance(1_ft);
-  Chassis.turnAngle(10_deg);
-  shoot(2500);
-  loadf();
-  pros::Task::delay(1500);
-  Chassis.moveDistance(-1_ft);
-  Chassis.turnAngle(70_deg);
-  Chassis.moveDistance(40_in);
-  Chassis.moveDistance(-4_in);
-  Chassis.turnAngle(97_deg);
-  Chassis.moveDistance(-3_ft);
-  /*
-  Chassis.setMaxVelocity(100);
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(90_deg);
-  Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(3.5_ft);
-  */
+  shootS(2500, 520);
+  load(2000);
 }
 
 
 static void ALT_BLUE_C()
 {
-	vision_READ(R_FLAG, -5, 45);
+  vision_READ(R_FLAG, -15, 5);
+  shoot(1700);
+  pros::Task::delay(500);
 	//shoot top top left flag
-	shoot(1800);
-	load(200);
-
-	//slow down the chassis to get more accurate turns.
-	Chassis.setMaxVelocity(50);
+  load(200);
 	//realign after shooting from an angle
-	Chassis.turnAngle(7_deg);
+	Chassis.turnAngle(8_deg);
 	//speed up the chassis again, we only have a minute after all.
-	Chassis.setMaxVelocity(170);
+	Chassis.setMaxVelocity(150);
+  Chassis.turnAngle(-100_deg);
 	//toggle the bottom left flag after shooting.
-	Chassis.moveDistance(47_in);
 
-	//get out of flag and turn towards cap(first ball)
-	Chassis.moveDistance(-46_in);
-	Chassis.turnAngle(-102_deg);
-	allignBackH();
-	Chassis.moveDistance(-11_in);
+  loadf();
+	Chassis.moveDistance(38_in);
+  stopLoader();
+  Chassis.moveDistance(-39_in);
 
+  Chassis.turnAngle(101_deg);
 
-	//turn on the loader to get the ball and drive for it.
-	loadf();
-	Chassis.moveDistance(44_in);
+  vision_READ(R_FLAG, -20, 5);
 
-	stopLoader();
+  Chassis.setMaxVelocity(120);
 
-	//turn towards flag and move back a bit to get base allignment.
-	Chassis.turnAngle(76_deg);
-//  Chassis.moveDistance(-2_in);
-	Chassis.moveDistance(3_ft);
-	//allign with the biggest green object on flag on the x coord.
+  Chassis.moveDistance(28_in);
+  load(1000);
 
-	//shoot and stop the loader and shooter
-	load(800);
-	stopLoader();
-	stopShooter();
-
-	Chassis.turnAngle(15_deg);
-
-	Chassis.setMaxVelocity(200);
-	//hit the bottom middle flag
-	Chassis.moveDistance(28_in);
+  Chassis.turnAngle(17_deg);
+  Chassis.moveDistance(20_in);
 }
-
 
 //start at red and move to gray, move forward to back of next tick
 static void ALT_RED_C()
 {
-	vision_READ(B_FLAG, -45, 5);
+	vision_READ(B_FLAG, -5, 25);
+  shoot(1700);
+  pros::Task::delay(500);
 	//shoot top top left flag
-	shoot(1800);
-	load(200);
-
-	//slow down the chassis to get more accurate turns.
-	Chassis.setMaxVelocity(50);
+  load(200);
 	//realign after shooting from an angle
-	Chassis.turnAngle(-7_deg);
+	Chassis.turnAngle(-8_deg);
 	//speed up the chassis again, we only have a minute after all.
-	Chassis.setMaxVelocity(170);
+	Chassis.setMaxVelocity(150);
+  Chassis.turnAngle(102_deg);
 	//toggle the bottom left flag after shooting.
-	Chassis.moveDistance(47_in);
 
-	//get out of flag and turn towards cap(first ball)
-	Chassis.moveDistance(-46_in);
-	Chassis.turnAngle(102_deg);
-	allignBackH();
-	Chassis.moveDistance(-11_in);
-
-
-	//turn on the loader to get the ball and drive for it.
-	loadf();
-	Chassis.moveDistance(44_in);
-
-	stopLoader();
-
-	//turn towards flag and move back a bit to get base allignment.
-	Chassis.turnAngle(-76_deg);
-//  Chassis.moveDistance(-2_in);
-	Chassis.moveDistance(3_ft);
-	//allign with the biggest green object on flag on the x coord.
-	vision_READ(B_FLAG, -45, 5);
-
-	//shoot and stop the loader and shooter
-	load(800);
-	stopLoader();
-	stopShooter();
-
-	Chassis.turnAngle(-15_deg);
-
-	Chassis.setMaxVelocity(200);
-	//hit the bottom middle flag
-	Chassis.moveDistance(28_in);
-
-
-}
-
-static void farBlue()
-{
-  shoot(2500);
   loadf();
-  pros::Task::delay(2000);
-  /*
-  Chassis.setMaxVelocity(100);
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(-90_deg);
-  Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(3.5_ft);
-  */
+	Chassis.moveDistance(39_in);
+  stopLoader();
+  Chassis.moveDistance(-39_in);
+
+  Chassis.turnAngle(-101_deg);
+
+  vision_READ(B_FLAG, -5, 25);
+
+  Chassis.setMaxVelocity(120);
+
+  Chassis.moveDistance(28_in);
+  load(1000);
+
+  Chassis.turnAngle(-15_deg);
+  Chassis.moveDistance(20_in);
 }
+
 //start front of first tick, farthest from flag
-
-
-
 
 //back of second tick
 static void skillz()
@@ -533,5 +255,5 @@ static void skillz()
 }
 void autonomous()
 {
-	ALT_RED_C();
+	FAR_RED();
 }

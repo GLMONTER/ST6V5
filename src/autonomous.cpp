@@ -68,6 +68,13 @@ using namespace okapi;
    pros::Task::delay(mili);
  }
 
+ static void shootS(std::uint32_t mili, int speed)
+ {
+   fly.move_velocity(speed);
+   fly2.move_velocity(speed);
+   pros::Task::delay(mili);
+ }
+
 //the robot chassis, okapi lib uses this data for the Chassis functions like moveDistance
  static auto Chassis = ChassisControllerFactory::create
  (
@@ -82,141 +89,78 @@ using namespace okapi;
  );
 
 
-//front of second tick, far from flag.
-static void farRed()
+static void FAR_RED()
 {
-  Chassis.moveDistance(1_ft);
-  Chassis.turnAngle(10_deg);
-  shoot(2500);
-  loadf();
-  pros::Task::delay(1500);
-  Chassis.moveDistance(-1_ft);
-  Chassis.turnAngle(70_deg);
-  Chassis.moveDistance(40_in);
-  Chassis.moveDistance(-4_in);
-  Chassis.turnAngle(97_deg);
-  Chassis.moveDistance(-3_ft);
-  /*
-  Chassis.setMaxVelocity(100);
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(90_deg);
-  Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(3.5_ft);
-  */
+  shootS(2500, 520);
+  load(2000);
 }
 
 
 static void ALT_BLUE_C()
 {
-	vision_READ(R_FLAG, -5, 45);
+  vision_READ(R_FLAG, -15, 5);
+  shoot(1700);
+  pros::Task::delay(500);
 	//shoot top top left flag
-	shoot(1800);
-	load(200);
-
-	//slow down the chassis to get more accurate turns.
-	Chassis.setMaxVelocity(50);
+  load(200);
 	//realign after shooting from an angle
-	Chassis.turnAngle(7_deg);
+	Chassis.turnAngle(8_deg);
 	//speed up the chassis again, we only have a minute after all.
-	Chassis.setMaxVelocity(170);
+	Chassis.setMaxVelocity(150);
+  Chassis.turnAngle(-100_deg);
 	//toggle the bottom left flag after shooting.
-	Chassis.moveDistance(47_in);
 
-	//get out of flag and turn towards cap(first ball)
-	Chassis.moveDistance(-46_in);
-	Chassis.turnAngle(-102_deg);
-	allignBackH();
-	Chassis.moveDistance(-11_in);
+  loadf();
+	Chassis.moveDistance(38_in);
+  stopLoader();
+  Chassis.moveDistance(-39_in);
 
+  Chassis.turnAngle(101_deg);
 
-	//turn on the loader to get the ball and drive for it.
-	loadf();
-	Chassis.moveDistance(44_in);
+  vision_READ(R_FLAG, -20, 5);
 
-	stopLoader();
+  Chassis.setMaxVelocity(120);
 
-	//turn towards flag and move back a bit to get base allignment.
-	Chassis.turnAngle(76_deg);
-//  Chassis.moveDistance(-2_in);
-	Chassis.moveDistance(3_ft);
-	//allign with the biggest green object on flag on the x coord.
+  Chassis.moveDistance(28_in);
+  load(1000);
 
-	//shoot and stop the loader and shooter
-	load(800);
-	stopLoader();
-	stopShooter();
-
-	Chassis.turnAngle(15_deg);
-
-	Chassis.setMaxVelocity(200);
-	//hit the bottom middle flag
-	Chassis.moveDistance(28_in);
+  Chassis.turnAngle(17_deg);
+  Chassis.moveDistance(20_in);
 }
 
 //start at red and move to gray, move forward to back of next tick
 static void ALT_RED_C()
 {
-	vision_READ(B_FLAG, -45, 5);
+	vision_READ(B_FLAG, -5, 25);
+  shoot(1700);
+  pros::Task::delay(500);
 	//shoot top top left flag
-	shoot(1800);
-	load(200);
-
-	//slow down the chassis to get more accurate turns.
-	Chassis.setMaxVelocity(50);
+  load(200);
 	//realign after shooting from an angle
-	Chassis.turnAngle(-7_deg);
+	Chassis.turnAngle(-8_deg);
 	//speed up the chassis again, we only have a minute after all.
-	Chassis.setMaxVelocity(170);
+	Chassis.setMaxVelocity(150);
+  Chassis.turnAngle(102_deg);
 	//toggle the bottom left flag after shooting.
-	Chassis.moveDistance(47_in);
 
-	//get out of flag and turn towards cap(first ball)
-	Chassis.moveDistance(-46_in);
-	Chassis.turnAngle(102_deg);
-	allignBackH();
-	Chassis.moveDistance(-11_in);
-
-
-	//turn on the loader to get the ball and drive for it.
-	loadf();
-	Chassis.moveDistance(44_in);
-
-	stopLoader();
-
-	//turn towards flag and move back a bit to get base allignment.
-	Chassis.turnAngle(-76_deg);
-//  Chassis.moveDistance(-2_in);
-	Chassis.moveDistance(3_ft);
-	//allign with the biggest green object on flag on the x coord.
-	vision_READ(B_FLAG, -45, 5);
-
-	//shoot and stop the loader and shooter
-	load(800);
-	stopLoader();
-	stopShooter();
-
-	Chassis.turnAngle(-15_deg);
-
-	Chassis.setMaxVelocity(200);
-	//hit the bottom middle flag
-	Chassis.moveDistance(28_in);
-
-
-}
-
-static void farBlue()
-{
-  shoot(2500);
   loadf();
-  pros::Task::delay(2000);
-  /*
-  Chassis.setMaxVelocity(100);
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(-90_deg);
-  Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(3.5_ft);
-  */
+	Chassis.moveDistance(39_in);
+  stopLoader();
+  Chassis.moveDistance(-39_in);
+
+  Chassis.turnAngle(-101_deg);
+
+  vision_READ(B_FLAG, -5, 25);
+
+  Chassis.setMaxVelocity(120);
+
+  Chassis.moveDistance(28_in);
+  load(1000);
+
+  Chassis.turnAngle(-15_deg);
+  Chassis.moveDistance(20_in);
 }
+
 //start front of first tick, farthest from flag
 
 //back of second tick
@@ -311,5 +255,5 @@ static void skillz()
 }
 void autonomous()
 {
-	ALT_RED_C();
+	FAR_RED();
 }
