@@ -1,5 +1,6 @@
 #include "main.h"
 #include"sensors.hpp"
+#include"display/lvgl.h"
 /**
 * Runs the operator control code. This function will be started in its own task
 * with the default priority and stack size whenever the robot is enabled via
@@ -191,11 +192,17 @@ void driveControl()
 	 //poll the shooter and loader
 	 pollTFly();
 	 pollToggles();
+	 pros::Task::delay(10);
  }
 }
 
 //operator control entry point
 void opcontrol()
 {
+extern const lv_img_t seal;
+	lv_obj_t * im = lv_img_create(lv_scr_act(), NULL); /*Crate an image object*/
+	lv_img_set_src(im, &seal);  /*Set the created file as image (a red fl  ower)*/
+	lv_obj_set_pos(im, 0, 0);      /*Set the positions*/
+	lv_obj_set_drag(im, true);
   driveControl();
 }

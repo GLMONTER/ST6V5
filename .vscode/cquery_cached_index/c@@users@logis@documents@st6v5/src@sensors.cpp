@@ -1,7 +1,7 @@
 #include"sensors.hpp"
 #define BLUE_SIG 0
 #define RED_SIG 1
-
+#define MAX_V_SPEED 30
 //a function that alligns with the green part of the flag using the vision sensor, finds the object that matches the signature passed in.
  void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT)
 {
@@ -17,6 +17,8 @@
 		//get the largest object(0), based on the signature passed in.
 		//we call this every update to get the new position of the object
 		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, RED_SIG);
+
+    std::cout<<rtn.x_middle_coord<<std::endl;
 
     //for driver level vision sensing.
     if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
@@ -38,26 +40,26 @@
 		//if the object is to the left, then turn the robot left.
 		if(rtn.x_middle_coord < MAX_LEFT)
 		{
-			rightMotB.move(40);
-			leftMotB.move(-40);
+			rightMotB.move(MAX_V_SPEED);
+			leftMotB.move(-MAX_V_SPEED);
 
-			rightMotF.move(40);
-			leftMotF.move(-40);
+			rightMotF.move(MAX_V_SPEED);
+			leftMotF.move(-MAX_V_SPEED);
 		}
 		else
 		{
 			//if the object is to the right, then turn the robot right.
 			if(rtn.x_middle_coord > MAX_RIGHT)
 			{
-				rightMotB.move(-40);
-				leftMotB.move(40);
+				rightMotB.move(-MAX_V_SPEED);
+				leftMotB.move(MAX_V_SPEED);
 
-				rightMotF.move(-40);
-				leftMotF.move(40);
+				rightMotF.move(-MAX_V_SPEED);
+				leftMotF.move(MAX_V_SPEED);
 			}
 		}
 		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(10);
+		pros::Task::delay(20);
 	}
 }
 //finds the differnce between either the back or front 2 ultrasonic sensors
@@ -112,12 +114,10 @@
 
 }
 //allign with the ultrasonic sensors facing the back
- void allignBackH()
+ void allignBackH(int dis, int mit)
 {
 	while(true)
   {
-		std::cout<<"left : "<<getLeft(Sides::Back)<<std::endl;
-		std::cout<<"right : "<<getRight(Sides::Back)<<std::endl;
     if(getDif(1) < 40)
     {
         break;
@@ -134,6 +134,35 @@
         rightMotB.move(50);
         leftMotB.move(-50);
       }
+    }
+    pros::Task::delay(10);
+  }
+  leftMotB.move(0);
+  leftMotF.move(0);
+
+  rightMotB.move(0);
+  rightMotF.move(0);
+
+  int temp = 0;
+  while(std::abs(temp - dis) > mit)
+  {
+    temp = ((getRight(Sides::Back) + getLeft(Sides::Back)) / 2);
+
+    if(temp > dis)
+    {
+      leftMotB.move(-40);
+      leftMotF.move(-40);
+
+      rightMotB.move(-40);
+      rightMotF.move(-40);
+    }
+    else
+    {
+      leftMotB.move(40);
+      leftMotF.move(40);
+
+      rightMotB.move(40);
+      rightMotF.move(40);
     }
     pros::Task::delay(10);
   }
@@ -173,7 +202,6 @@
 
   rightMotB.move(0);
   rightMotF.move(0);
-
 
 	int temp;
   while(std::abs(temp - dis) > 100)

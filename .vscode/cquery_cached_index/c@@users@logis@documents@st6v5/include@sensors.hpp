@@ -8,6 +8,6 @@
 
  int getRight(int side);
 
- void allignBackH();
+ void allignBackH(int dis, int mit);
 
  void allignFront(int dis);
