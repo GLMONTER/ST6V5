@@ -91,15 +91,12 @@ using namespace okapi;
 
 static void FAR_RED()
 {
-  while(true)
-  {
-    std::cout<<getLeft(Sides::Back)<<std::endl;
-  }
   shoot(1);
   Chassis.setMaxVelocity(50);
   Chassis.moveDistance(6_in);
   pros::Task::delay(1000);
   load(500);
+  stopShooter();
 
 
   Chassis.setMaxVelocity(150);
@@ -109,17 +106,18 @@ static void FAR_RED()
   allignBackH(270, 20);
   loadf();
   Chassis.moveDistance(37_in);
-  pros::Task::delay(100);
+  pros::Task::delay(50);
   stopLoader();
 
   allignBackH(1300, 50);
-  Chassis.setMaxVelocity(50);
-  Chassis.moveDistance(-1_in);
-  Chassis.setMaxVelocity(170);
 
-  Chassis.turnAngle(100_deg);
-  Chassis.moveDistance(-34_in);
+  Chassis.moveDistance(-39_in);
+  Chassis.turnAngle(-100_deg);
+  Chassis.moveDistance(24.5_in);
 
+  Chassis.turnAngle(-100_deg);
+  Chassis.setMaxVelocity(175);
+  Chassis.moveDistance(-48_in);
 
 }
 
