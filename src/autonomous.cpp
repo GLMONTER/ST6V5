@@ -88,6 +88,38 @@ using namespace okapi;
    {4_in, 14.5_in}
  );
 
+ static void FAR_BLUE()
+ {
+   shoot(1);
+   Chassis.setMaxVelocity(50);
+   Chassis.moveDistance(6_in);
+   pros::Task::delay(1000);
+   load(500);
+   stopShooter();
+
+
+   Chassis.setMaxVelocity(150);
+   Chassis.moveDistance(-6_in);
+   Chassis.turnAngle(-66_deg);
+
+   allignBackH(270, 20);
+   loadf();
+   Chassis.moveDistance(37_in);
+   pros::Task::delay(50);
+   stopLoader();
+
+   allignBackH(1300, 50);
+
+   Chassis.moveDistance(-39_in);
+   Chassis.turnAngle(96_deg);
+   Chassis.moveDistance(24.5_in);
+
+   Chassis.turnAngle(104_deg);
+   Chassis.setMaxVelocity(175);
+   Chassis.moveDistance(-48_in);
+
+ }
+
 
 static void FAR_RED()
 {
@@ -137,7 +169,7 @@ static void ALT_BLUE_C()
 	//toggle the bottom left flag after shooting.
 
   loadf();
-	Chassis.moveDistance(38_in);
+	Chassis.moveDistance(37_in);
   stopLoader();
   Chassis.moveDistance(-39_in);
 
@@ -150,7 +182,7 @@ static void ALT_BLUE_C()
   Chassis.moveDistance(28_in);
   load(1000);
 
-  Chassis.turnAngle(17_deg);
+  Chassis.turnAngle(18_deg);
   Chassis.moveDistance(20_in);
 }
 
@@ -166,11 +198,11 @@ static void ALT_RED_C()
 	Chassis.turnAngle(-8_deg);
 	//speed up the chassis again, we only have a minute after all.
 	Chassis.setMaxVelocity(150);
-  Chassis.turnAngle(102_deg);
+  Chassis.turnAngle(101_deg);
 	//toggle the bottom left flag after shooting.
 
   loadf();
-	Chassis.moveDistance(39_in);
+	Chassis.moveDistance(38_in);
   stopLoader();
   Chassis.moveDistance(-39_in);
 
@@ -281,5 +313,5 @@ static void skillz()
 }
 void autonomous()
 {
-	FAR_RED();
+	ALT_RED_C();
 }
