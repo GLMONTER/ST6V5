@@ -156,7 +156,7 @@ static void FAR_RED()
 
 static void ALT_BLUE_C()
 {
-  vision_READ(R_FLAG, -15, 5);
+  vision_READ(R_FLAG, -12, 5);
   shoot(1700);
   pros::Task::delay(500);
 	//shoot top top left flag
@@ -175,7 +175,7 @@ static void ALT_BLUE_C()
 
   Chassis.turnAngle(101_deg);
 
-  vision_READ(R_FLAG, -20, 5);
+  vision_READ(R_FLAG, -25, 5);
 
   Chassis.setMaxVelocity(120);
 
@@ -189,7 +189,7 @@ static void ALT_BLUE_C()
 //start at red and move to gray, move forward to back of next tick
 static void ALT_RED_C()
 {
-	vision_READ(B_FLAG, -5, 25);
+	vision_READ(B_FLAG, -5, 20);
   shoot(1700);
   pros::Task::delay(500);
 	//shoot top top left flag
@@ -208,14 +208,14 @@ static void ALT_RED_C()
 
   Chassis.turnAngle(-101_deg);
 
-  vision_READ(B_FLAG, -5, 25);
+  vision_READ(B_FLAG, -5, 20);
 
   Chassis.setMaxVelocity(120);
 
   Chassis.moveDistance(28_in);
   load(1000);
 
-  Chassis.turnAngle(-15_deg);
+  Chassis.turnAngle(-17_deg);
   Chassis.moveDistance(20_in);
 }
 
