@@ -43,6 +43,8 @@ using namespace okapi;
  //stop the loading system.
  static void stopLoader()
  {
+   LoadServ.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+   LoadServ2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
    LoadServ.move_velocity(0);
    LoadServ2.move_velocity(0);
  }
@@ -68,6 +70,13 @@ using namespace okapi;
    pros::Task::delay(mili);
  }
 
+ static void shoot(std::uint32_t mili, int vol)
+ {
+   fly.move_velocity(vol);
+   fly2.move_velocity(vol);
+   pros::Task::delay(mili);
+ }
+
  static void shootS(std::uint32_t mili, int speed)
  {
    fly.move_velocity(speed);
@@ -90,99 +99,101 @@ using namespace okapi;
 
  static void FAR_BLUE()
  {
-   shoot(1);
-   Chassis.setMaxVelocity(50);
-   Chassis.moveDistance(6_in);
-   pros::Task::delay(1000);
-   load(500);
-   stopShooter();
-
-
    Chassis.setMaxVelocity(150);
-   Chassis.moveDistance(-6_in);
-   Chassis.turnAngle(-66_deg);
 
-   allignBackH(270, 20);
+   //allignBackH(270, 20);
    loadf();
-   Chassis.moveDistance(37_in);
+   Chassis.moveDistance(37.5_in);
    pros::Task::delay(50);
    stopLoader();
+   Chassis.moveDistance(6_in);
 
-   allignBackH(1300, 50);
+   Chassis.turnAngle(-77_deg);
 
-   Chassis.moveDistance(-39_in);
-   Chassis.turnAngle(96_deg);
-   Chassis.moveDistance(24.5_in);
+   LoadServ2.move(-127);
+    Chassis.setMaxVelocity(150);
+   Chassis.moveDistance(17_in);
+   LoadServ2.move(0);
 
-   Chassis.turnAngle(104_deg);
-   Chassis.setMaxVelocity(175);
-   Chassis.moveDistance(-48_in);
+    Chassis.setMaxVelocity(150);
+   Chassis.moveDistance(-52_in);
 
  }
 
 
 static void FAR_RED()
 {
-  shoot(1);
-  Chassis.setMaxVelocity(50);
-  Chassis.moveDistance(6_in);
-  pros::Task::delay(1000);
-  load(500);
-  stopShooter();
-
-
   Chassis.setMaxVelocity(150);
-  Chassis.moveDistance(-6_in);
-  Chassis.turnAngle(64_deg);
 
-  allignBackH(270, 20);
+  //allignBackH(270, 20);
   loadf();
-  Chassis.moveDistance(37_in);
+  Chassis.moveDistance(37.5_in);
   pros::Task::delay(50);
   stopLoader();
+  Chassis.moveDistance(6_in);
 
-  allignBackH(1300, 50);
+  Chassis.turnAngle(92_deg);
 
-  Chassis.moveDistance(-39_in);
-  Chassis.turnAngle(-100_deg);
-  Chassis.moveDistance(24.5_in);
+  LoadServ2.move(-127);
+   Chassis.setMaxVelocity(150);
+  Chassis.moveDistance(17_in);
+  LoadServ2.move(0);
 
-  Chassis.turnAngle(-100_deg);
-  Chassis.setMaxVelocity(175);
-  Chassis.moveDistance(-48_in);
-
+   Chassis.setMaxVelocity(150);
+  Chassis.moveDistance(-52_in);
 }
 
 
 static void ALT_BLUE_C()
 {
-  vision_READ(R_FLAG, -12, 5);
-  shoot(1700);
+  shoot(1);
+  leftMotF.move(50);
+  leftMotB.move(50);
+  rightMotF.move(50);
+  rightMotB.move(50);
+  pros::Task::delay(200);
+  leftMotF.move(0);
+  leftMotB.move(0);
+  rightMotF.move(0);
+  rightMotB.move(0);
+  pros::Task::delay(1500);
+  vision_READ(R_FLAG, -35, -5);
   pros::Task::delay(500);
-	//shoot top top left flag
-  load(200);
+  //shoot top top left flag
+  load(300);
+
+  leftMotF.move(-50);
+  leftMotB.move(-50);
+  rightMotF.move(-50);
+  rightMotB.move(-50);
+  pros::Task::delay(200);
+  leftMotF.move(0);
+  leftMotB.move(0);
+  rightMotF.move(0);
+  rightMotB.move(0);
+
 	//realign after shooting from an angle
 	Chassis.turnAngle(8_deg);
 	//speed up the chassis again, we only have a minute after all.
 	Chassis.setMaxVelocity(150);
-  Chassis.turnAngle(-100_deg);
+  Chassis.turnAngle(-103_deg);
 	//toggle the bottom left flag after shooting.
 
   loadf();
-	Chassis.moveDistance(37_in);
+	Chassis.moveDistance(36.5_in);
   stopLoader();
   Chassis.moveDistance(-39_in);
 
   Chassis.turnAngle(101_deg);
 
-  vision_READ(R_FLAG, -25, 5);
+  vision_READ(R_FLAG, -35, -5);
 
   Chassis.setMaxVelocity(120);
 
   Chassis.moveDistance(28_in);
   load(1000);
 
-  Chassis.turnAngle(18_deg);
+  Chassis.turnAngle(16_deg);
   Chassis.moveDistance(20_in);
 }
 
@@ -225,7 +236,9 @@ static void ALT_RED_C()
 static void skillz()
 {
   //shoot top top left flag
-  shoot(2000);
+  shoot(1);
+  vision_READ(B_FLAG, -5, 20);
+  pros::Task::delay(2000);
   loadf();
   pros::Task::delay(1250);
   stopShooter();
@@ -234,14 +247,14 @@ static void skillz()
   //slow down the chassis to get more accurate turns.
   Chassis.setMaxVelocity(50);
   //realign after shooting from an angle
-  Chassis.turnAngle(-10);
+  Chassis.turnAngle(-8_deg);
   //speed up the chassis again, we only have a minute after all.
   Chassis.setMaxVelocity(125);
   //toggle the bottom left flag after shooting.
   Chassis.moveDistance(48_in);
 
   //get out of flag and turn towards cap(first ball)
-  Chassis.moveDistance(-44_in);
+  Chassis.moveDistance(-46_in);
   Chassis.turnAngle(102_deg);
   //turn on the loader to get the ball and drive for it.
   loadf();
@@ -255,7 +268,7 @@ static void skillz()
   Chassis.moveDistance(-2_in);
   //allign with the biggest green object on flag on the x coord.
 //  readV();
-
+  vision_READ(B_FLAG, -5, 20);
   //reverse to make sure we didn't load to much and the ball will get caught in the fly wheel
   loadR(100);
   //shoot and stop the loader and shooter
@@ -275,7 +288,7 @@ static void skillz()
   Chassis.moveDistance(-24_in);
 
   //turn towards cap to flip and turn on the loader reversed so the robot doesn't eat the cap, then go for it.
-  Chassis.turnAngle(-97_deg);
+  Chassis.turnAngle(-98_deg);
   loadfr();
   Chassis.moveDistance(21_in);
 
@@ -291,7 +304,7 @@ static void skillz()
   pros::Task::delay(100);
   Chassis.turnAngle(148_deg);
   loadR(100);
-//  readV();
+  vision_READ(B_FLAG, -5, 20);
   shoot(2000);
   load(1400);
 
@@ -309,9 +322,11 @@ static void skillz()
   Chassis.moveDistance(44_in);
   Chassis.turnAngle(100_deg);
   Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(-6_ft);
+  Chassis.moveDistance(-6.5_ft);
 }
+
+
 void autonomous()
 {
-	ALT_RED_C();
+	FAR_RED();
 }

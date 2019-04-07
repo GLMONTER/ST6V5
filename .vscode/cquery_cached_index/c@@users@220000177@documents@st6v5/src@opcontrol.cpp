@@ -188,7 +188,6 @@ void driveControl()
 		 rightMotB.move(-mController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
 		 rightMotF.move(-mController.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
 	 }
-
 	 //poll the shooter and loader
 	 pollTFly();
 	 pollToggles();
@@ -199,12 +198,12 @@ void driveControl()
 //operator control entry point
 void opcontrol()
 {
-	/*
+/*
 extern const lv_img_t seal;
 	lv_obj_t * im = lv_img_create(lv_scr_act(), NULL);
 	lv_img_set_src(im, &seal);
-	lv_obj_set_pos(im, 0, 0);  
+	lv_obj_set_pos(im, 0, 0);
 	lv_obj_set_drag(im, true);
-	*/
+*/
   driveControl();
 }
