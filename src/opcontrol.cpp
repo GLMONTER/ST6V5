@@ -54,14 +54,14 @@ void pollTFly()
 	if(flyToggle)
 	{
 		fly.move_velocity(600);
-    fly2.move_velocity(600);
+    	fly2.move_velocity(600);
 	}
 	else
   {
 		if(!flyToggle)
 		{
 			fly.move(0);
-      fly2.move(0);
+      		fly2.move(0);
 		}
   }
 }
@@ -91,7 +91,7 @@ void pollToggles()
 if(buttonToggleF == true)
 {
 	LoadServ.move(90);
-  LoadServ2.move(90);
+  	LoadServ2.move(90);
 }
 //check if other toggle is on if we need to really stop the motor
 else
@@ -99,7 +99,7 @@ else
 	if(!buttonToggleR && !buttonToggleF)
 	{
 		LoadServ.move(0);
-	  LoadServ2.move(0);
+	  	LoadServ2.move(0);
 	}
 }
 //go backwards with drum
@@ -125,7 +125,7 @@ else
 if(buttonToggleR == true)
 {
 	LoadServ.move(-90);
-  LoadServ2.move(-90);
+  	LoadServ2.move(-90);
 }
 	//else, check if the forward toggle is off, then stop.
 	else
@@ -133,7 +133,7 @@ if(buttonToggleR == true)
 		if(!buttonToggleF && !buttonToggleR)
 		{
 			LoadServ.move(0);
-	  	LoadServ2.move(0);
+	  		LoadServ2.move(0);
 		}
 	}
 }

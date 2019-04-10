@@ -111,11 +111,11 @@ using namespace okapi;
    Chassis.turnAngle(-77_deg);
 
    LoadServ2.move(-127);
-    Chassis.setMaxVelocity(150);
+   Chassis.setMaxVelocity(150);
    Chassis.moveDistance(17_in);
    LoadServ2.move(0);
 
-    Chassis.setMaxVelocity(150);
+   Chassis.setMaxVelocity(150);
    Chassis.moveDistance(-52_in);
 
  }
@@ -135,11 +135,11 @@ static void FAR_RED()
   Chassis.turnAngle(92_deg);
 
   LoadServ2.move(-127);
-   Chassis.setMaxVelocity(150);
+  Chassis.setMaxVelocity(150);
   Chassis.moveDistance(17_in);
   LoadServ2.move(0);
 
-   Chassis.setMaxVelocity(150);
+  Chassis.setMaxVelocity(150);
   Chassis.moveDistance(-52_in);
 }
 
