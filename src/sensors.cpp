@@ -1,31 +1,34 @@
 #include"sensors.hpp"
-#define BLUE_SIG 0
-#define RED_SIG 1
+
+//used as a reference to get the signature
+#define SIG 0
+
+//the max speed our motors can go when alligning.
 #define MAX_V_SPEED 30
-//a function that alligns with the green part of the flag using the vision sensor, finds the object that matches the signature passed in.
+
+//simply a function that reads the signaure(sig) passed in, and looks at it within the given range(MAX_LEFT, MAX_RIGHT).
  void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT)
 {
   //basically resetting the vision sensor.
 	vSensor.clear_led();
   //set the blue signature to an index that can be referenced later.
 
-  vSensor.set_signature(RED_SIG, &sig);
+  //set SIG as sig so SIG can be referenced later
+  vSensor.set_signature(SIG, &sig);
 
-  //infinate loop so we can update the position of the vision object we find, for allignment.
+  //update the position of the signature, if it is out of range, ajust the robot, 
+  //if it is good, stop the motors and break out of the loop.
 	while(true)
 	{
 		//get the largest object(0), based on the signature passed in.
 		//we call this every update to get the new position of the object
-		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, RED_SIG);
-
-    std::cout<<rtn.x_middle_coord<<std::endl;
+		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, SIG);
 
     //for driver level vision sensing.
     if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
     {
       break;
     }
-		//std::cout<<"value : "<<rtn.x_middle_coord<<std::endl;
 		//if it is within range, stop the motors.
 		if(!(rtn.x_middle_coord < MAX_LEFT) && !(rtn.x_middle_coord > MAX_RIGHT))
 		{
@@ -59,7 +62,7 @@
 			}
 		}
 		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(20);
+		pros::Task::delay(10);
 	}
 }
 //finds the differnce between either the back or front 2 ultrasonic sensors
@@ -89,7 +92,7 @@
 {
 	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
 	pros::Task::delay(50);
-	if(side == 0)
+	if(side == Sides::Front)
 	{
 		return frontL.get_value();
 	}
@@ -102,8 +105,9 @@
  int getRight(int side)
 {
 	//added a delay which seemed to fix some problems getting the value with the ultrasonic sensors..
+  //may want to research this more
 	pros::Task::delay(50);
-	if(side == 0)
+	if(side == Sides::Front)
 	{
 		return frontR.get_value();
 	}
@@ -118,7 +122,7 @@
 {
 	while(true)
   {
-    if(getDif(1) < 40)
+    if(getDif(Sides::Back) < 40)
     {
         break;
     }
@@ -135,13 +139,14 @@
         leftMotB.move(-50);
       }
     }
+    //so the loop doesn't starve low priority tasks.
     pros::Task::delay(10);
   }
-  leftMotB.move(0);
-  leftMotF.move(0);
+  leftMotB.move_velocity(0);
+  leftMotF.move_velocity(0);
 
-  rightMotB.move(0);
-  rightMotF.move(0);
+  rightMotB.move_velocity(0);
+  rightMotF.move_velocity(0);
 
   int temp = 0;
   while(std::abs(temp - dis) > mit)
@@ -164,13 +169,14 @@
       rightMotB.move(40);
       rightMotF.move(40);
     }
+    //so the loop doesn't starve low priority tasks.
     pros::Task::delay(10);
   }
-  leftMotB.move(0);
-  leftMotF.move(0);
+  leftMotB.move_velocity(0);
+  leftMotF.move_velocity(0);
 
-  rightMotB.move(0);
-  rightMotF.move(0);
+  rightMotB.move_velocity(0);
+  rightMotF.move_velocity(0);
 }
 
 //a test function for using the ultrasonic sensor to line the robot up without hitting a wall.
@@ -197,11 +203,11 @@
     }
     pros::Task::delay(10);
   }
-  leftMotB.move(0);
-  leftMotF.move(0);
+  leftMotB.move_velocity(0);
+  leftMotF.move_velocity(0);
 
-  rightMotB.move(0);
-  rightMotF.move(0);
+  rightMotB.move_velocity(0);
+  rightMotF.move_velocity(0);
 
 	int temp;
   while(std::abs(temp - dis) > 80)
@@ -224,11 +230,12 @@
       rightMotB.move(-40);
       rightMotF.move(-40);
     }
+    //so the loop doesn't starve low priority tasks.
     pros::Task::delay(10);
   }
-  leftMotB.move(0);
-  leftMotF.move(0);
+  leftMotB.move_velocity(0);
+  leftMotF.move_velocity(0);
 
-  rightMotB.move(0);
-  rightMotF.move(0);
+  rightMotB.move_velocity(0);
+  rightMotF.move_velocity(0);
 }
