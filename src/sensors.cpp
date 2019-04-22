@@ -201,6 +201,8 @@
         leftMotB.move(50);
       }
     }
+    //so the loop doesn't starve low priority tasks.
+
     pros::Task::delay(10);
   }
   leftMotB.move_velocity(0);

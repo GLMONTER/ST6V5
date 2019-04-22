@@ -93,8 +93,8 @@ using namespace okapi;
    {-11, -12},
    //the motors are using the green gearset.
    AbstractMotor::gearset::green,
-   //the wheel diameter is 4 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
-   {4_in, 14.5_in}
+   //the wheel diameter is 4.125 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
+   {4.125_in, 14_in}
  );
 
  static void FAR_BLUE()
@@ -328,5 +328,6 @@ static void skillz()
 
 void autonomous()
 {
+  leftMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	FAR_RED();
 }
