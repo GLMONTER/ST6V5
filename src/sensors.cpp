@@ -4,10 +4,10 @@
 #define SIG 1
 
 //the max speed our motors can go when alligning.
-#define MAX_V_SPEED 20
+#define MAX_V_SPEED 25
 
 //simply a function that reads the signaure(sig) passed in, and looks at it within the given range(MAX_LEFT, MAX_RIGHT).
- void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT)
+ void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT, bool aton)
 {
   //basically resetting the vision sensor.
 	vSensor.clear_led();
@@ -25,7 +25,7 @@
 		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, SIG);
     std::cout<<rtn.x_middle_coord<<std::endl;
     //for driver level vision sensing.
-    if(!mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+    if(!mController.get_digital(pros::E_CONTROLLER_DIGITAL_A) && !aton)
     {
       break;
     }

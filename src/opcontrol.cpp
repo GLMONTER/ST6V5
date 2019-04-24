@@ -151,9 +151,9 @@ void driveControl()
  	if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
  	{
  		if(IS_RED)
-			vision_READ(B_FLAG_D, 0, 20);
+			vision_READ(B_FLAG_D, 0, 20, false);
 		else
-			vision_READ(R_FLAG_D, -20, -5);
+			vision_READ(R_FLAG_D, -20, -5, false);
  	}
 	 //the toggle for reversing the drive train
 	 if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
@@ -215,5 +215,8 @@ extern const lv_img_t seal;
 	lv_obj_set_pos(im, 0, 0);
 	lv_obj_set_drag(im, true);
 */
+
+	rightMotF.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rightMotB.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   driveControl();
 }

@@ -156,7 +156,7 @@ static void CLOSE_BLUE()
   rightMotF.move(0);
   rightMotB.move(0);
   pros::Task::delay(1500);
-  vision_READ(R_FLAG, -35, -5);
+  vision_READ(R_FLAG, -35, -5, true);
   pros::Task::delay(500);
   //shoot top top left flag
   load(300);
@@ -185,7 +185,7 @@ static void CLOSE_BLUE()
 
   Chassis.turnAngle(101_deg);
 
-  vision_READ(R_FLAG, -35, -5);
+  vision_READ(R_FLAG, -35, -5, true);
 
   Chassis.setMaxVelocity(120);
 
@@ -201,24 +201,26 @@ static void CLOSE_RED()
 {
   shootS(1, 480);
 
-  Chassis.setMaxVelocity(150);
+  Chassis.setMaxVelocity(130);
   Chassis.moveDistance(44_in);
-  Chassis.moveDistance(-44_in);
+  Chassis.moveDistance(-42_in);
 
-  vision_READ(B_FLAG, 0, 20);
+  vision_READ(B_FLAG, 0, 20, true);
 
   load(500);
 
-  Chassis.turnAngle(90_deg);
+  Chassis.moveDistance(-8_in);
+  Chassis.turnAngle(80_deg);
   loadf();
   Chassis.moveDistance(42_in);
   stopLoader();
 
   Chassis.turnAngle(-70_deg);
-  vision_READ(B_FLAG, 0, 20);
+  Chassis.moveDistance(14_in);
+  vision_READ(B_FLAG, 0, 20, true);
   load(1000);
-  Chassis.turnAngle(-10_deg);
-  Chassis.moveDistance(44_in);
+ // Chassis.turnAngle(-10_deg);
+  Chassis.moveDistance(38_in);
 
 }
 
@@ -229,7 +231,7 @@ static void skillz()
 {
   //shoot top top left flag
   shoot(1);
-  vision_READ(B_FLAG, -5, 20);
+  vision_READ(B_FLAG, -5, 20, true);
   pros::Task::delay(2000);
   loadf();
   pros::Task::delay(1250);
@@ -260,7 +262,7 @@ static void skillz()
   Chassis.moveDistance(-2_in);
   //allign with the biggest green object on flag on the x coord.
 //  readV();
-  vision_READ(B_FLAG, -5, 20);
+  vision_READ(B_FLAG, -5, 20, true);
   //reverse to make sure we didn't load to much and the ball will get caught in the fly wheel
   loadR(100);
   //shoot and stop the loader and shooter
@@ -296,7 +298,7 @@ static void skillz()
   pros::Task::delay(100);
   Chassis.turnAngle(148_deg);
   loadR(100);
-  vision_READ(B_FLAG, -5, 20);
+  vision_READ(B_FLAG, -5, 20, true);
   shoot(2000);
   load(1400);
 
@@ -320,5 +322,5 @@ static void skillz()
 
 void autonomous()
 {
-	FAR_RED();
+	CLOSE_RED();
 }
