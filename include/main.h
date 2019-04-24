@@ -66,12 +66,14 @@ extern pros::Controller mController;
 
 extern pros::Vision vSensor;
 
+/*
 extern pros::ADIUltrasonic backR;
 extern pros::ADIUltrasonic backL;
 
 extern pros::ADIUltrasonic frontR;
 extern pros::ADIUltrasonic frontL;
 
+*/
 extern pros::Motor LoadServ;
 extern pros::Motor LoadServ2;
 
@@ -86,6 +88,7 @@ extern pros::Motor fly2;
 //for the ultrasonic functions instead of remembering numbers
 enum Sides {Front = 0, Back = 1};
 
+/*
 //these are for the ultrasonic ADI ports, F_R_O meaning front right orange cable, and F_R_Y meaning front right yellow cable ect.
 #define F_R_O 3
 #define F_R_Y 4
@@ -98,6 +101,7 @@ enum Sides {Front = 0, Back = 1};
 
 #define B_L_O 5
 #define B_L_Y 6
+*/
 
 void autonomous(void);
 void initialize(void);

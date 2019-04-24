@@ -1,6 +1,7 @@
 #include "main.h"
 #include"sensors.hpp"
 #include"display/lvgl.h"
+#define IS_RED true
 /**
 * Runs the operator control code. This function will be started in its own task
 * with the default priority and stack size whenever the robot is enabled via
@@ -37,6 +38,7 @@ int reversePressed = 0;
 //a function that polls the controls for the fly wheel the acts on the fly wheel based on the controls.
 void pollTFly()
 {
+
 	//the toggle for the fly wheel.
 	if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
 	{
@@ -53,8 +55,8 @@ void pollTFly()
 	//if the fly wheel toggle is true, set the shooter to 600 RPM, else turn it off
 	if(flyToggle)
 	{
-		fly.move_velocity(600);
-    	fly2.move_velocity(600);
+		fly.move(127);
+    	fly2.move(127);
 	}
 	else
   {
@@ -140,11 +142,19 @@ if(buttonToggleR == true)
 
 bool rev = false;
 //the driving code
+
 void driveControl()
 {
 //infinite loop to keep the driving code going.
  while(true)
  {
+ 	if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+ 	{
+ 		if(IS_RED)
+			vision_READ(B_FLAG_D, 0, 20);
+		else
+			vision_READ(R_FLAG_D, -20, -5);
+ 	}
 	 //the toggle for reversing the drive train
 	 if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
 	 {

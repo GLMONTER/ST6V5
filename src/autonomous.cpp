@@ -1,6 +1,4 @@
 #include "main.h"
-//for std::abs
-#include<cstdlib>
 #include"sensors.hpp"
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -43,6 +41,7 @@ using namespace okapi;
  //stop the loading system.
  static void stopLoader()
  {
+  //could optimize
    LoadServ.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
    LoadServ2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
    LoadServ.move_velocity(0);
@@ -72,8 +71,8 @@ using namespace okapi;
 
  static void shoot(std::uint32_t mili, int vol)
  {
-   fly.move_velocity(vol);
-   fly2.move_velocity(vol);
+   fly.move(127);
+   fly2.move(127);
    pros::Task::delay(mili);
  }
 
@@ -88,9 +87,9 @@ using namespace okapi;
  static auto Chassis = ChassisControllerFactory::create
  (
    //left drive train
-   {1, 2},
+   {11, 12},
    //right drive train, reversed hence the -
-   {-11, -12},
+   {-20, -19},
    //the motors are using the green gearset.
    AbstractMotor::gearset::green,
    //the wheel diameter is 4.125 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
@@ -144,7 +143,7 @@ static void FAR_RED()
 }
 
 
-static void ALT_BLUE_C()
+static void CLOSE_BLUE()
 {
   shoot(1);
   leftMotF.move(50);
@@ -198,36 +197,29 @@ static void ALT_BLUE_C()
 }
 
 //start at red and move to gray, move forward to back of next tick
-static void ALT_RED_C()
+static void CLOSE_RED()
 {
-	vision_READ(B_FLAG, -5, 20);
-  shoot(1700);
-  pros::Task::delay(500);
-	//shoot top top left flag
-  load(200);
-	//realign after shooting from an angle
-	Chassis.turnAngle(-8_deg);
-	//speed up the chassis again, we only have a minute after all.
-	Chassis.setMaxVelocity(150);
-  Chassis.turnAngle(101_deg);
-	//toggle the bottom left flag after shooting.
+  shootS(1, 480);
 
+  Chassis.setMaxVelocity(150);
+  Chassis.moveDistance(44_in);
+  Chassis.moveDistance(-44_in);
+
+  vision_READ(B_FLAG, 0, 20);
+
+  load(500);
+
+  Chassis.turnAngle(90_deg);
   loadf();
-	Chassis.moveDistance(38_in);
+  Chassis.moveDistance(42_in);
   stopLoader();
-  Chassis.moveDistance(-39_in);
 
-  Chassis.turnAngle(-101_deg);
-
-  vision_READ(B_FLAG, -5, 20);
-
-  Chassis.setMaxVelocity(120);
-
-  Chassis.moveDistance(28_in);
+  Chassis.turnAngle(-70_deg);
+  vision_READ(B_FLAG, 0, 20);
   load(1000);
+  Chassis.turnAngle(-10_deg);
+  Chassis.moveDistance(44_in);
 
-  Chassis.turnAngle(-17_deg);
-  Chassis.moveDistance(20_in);
 }
 
 //start front of first tick, farthest from flag
@@ -328,6 +320,5 @@ static void skillz()
 
 void autonomous()
 {
-  leftMotB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	FAR_RED();
 }

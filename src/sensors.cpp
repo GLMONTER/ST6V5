@@ -1,10 +1,10 @@
 #include"sensors.hpp"
 
 //used as a reference to get the signature
-#define SIG 0
+#define SIG 1
 
 //the max speed our motors can go when alligning.
-#define MAX_V_SPEED 30
+#define MAX_V_SPEED 20
 
 //simply a function that reads the signaure(sig) passed in, and looks at it within the given range(MAX_LEFT, MAX_RIGHT).
  void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT)
@@ -23,9 +23,9 @@
 		//get the largest object(0), based on the signature passed in.
 		//we call this every update to get the new position of the object
 		pros::vision_object_s_t rtn = vSensor.get_by_sig(0, SIG);
-
+    std::cout<<rtn.x_middle_coord<<std::endl;
     //for driver level vision sensing.
-    if(mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+    if(!mController.get_digital(pros::E_CONTROLLER_DIGITAL_A))
     {
       break;
     }
@@ -62,9 +62,10 @@
 			}
 		}
 		//so we don't starv other tasks like updating the LCD
-		pros::Task::delay(10);
+		pros::Task::delay(20);
 	}
 }
+/*
 //finds the differnce between either the back or front 2 ultrasonic sensors
  int getDif(int side)
 {
@@ -241,3 +242,4 @@
   rightMotB.move_velocity(0);
   rightMotF.move_velocity(0);
 }
+*/
