@@ -122,24 +122,26 @@ using namespace okapi;
 
 static void FAR_RED()
 {
-  Chassis.setMaxVelocity(150);
-
-  //allignBackH(270, 20);
-  loadf();
-  Chassis.moveDistance(37.5_in);
-  pros::Task::delay(50);
+  shootS(1, 425);
+  LoadServ2.move(127);
+  Chassis.moveDistance(44_in);
   stopLoader();
-  Chassis.moveDistance(6_in);
 
-  Chassis.turnAngle(92_deg);
+  Chassis.turnAngle(-80_deg);
 
-  LoadServ2.move(-127);
-  Chassis.setMaxVelocity(150);
-  Chassis.moveDistance(17_in);
-  LoadServ2.move(0);
+  vision_READ(B_FLAG, 0, 20, true);
 
-  Chassis.setMaxVelocity(150);
-  Chassis.moveDistance(-52_in);
+  LoadServ.move(127);
+  pros::Task::delay(500);
+  stopLoader();
+
+  shootS(1000, 480);
+
+  
+
+
+
+
 }
 
 
