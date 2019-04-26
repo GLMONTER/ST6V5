@@ -10,13 +10,13 @@
  void vision_READ(pros::vision_signature_s_t sig, int MAX_LEFT, int MAX_RIGHT, bool aton)
 {
   //basically resetting the vision sensor.
+  //not sure exactly what this does....
 	vSensor.clear_led();
-  //set the blue signature to an index that can be referenced later.
 
   //set SIG as sig so SIG can be referenced later
   vSensor.set_signature(SIG, &sig);
 
-  //update the position of the signature, if it is out of range, ajust the robot, 
+  //update the position of the signature, if it is out of range, ajust the robot,
   //if it is good, stop the motors and break out of the loop.
 	while(true)
 	{

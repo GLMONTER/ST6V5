@@ -208,13 +208,12 @@ void driveControl()
 //operator control entry point
 void opcontrol()
 {
-/*
+
 extern const lv_img_t seal;
 	lv_obj_t * im = lv_img_create(lv_scr_act(), NULL);
 	lv_img_set_src(im, &seal);
 	lv_obj_set_pos(im, 0, 0);
 	lv_obj_set_drag(im, true);
-*/
 
 	rightMotF.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	rightMotB.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);

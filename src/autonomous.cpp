@@ -95,64 +95,64 @@ using namespace okapi;
    //the wheel diameter is 4.125 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
    {4.125_in, 14_in}
  );
-
+ //left of 4, back of 5
  static void FAR_BLUE()
  {
-   Chassis.setMaxVelocity(150);
+   shootS(4000, 475);
 
-   //allignBackH(270, 20);
+   load(500);
+   Chassis.setMaxVelocity(150);
+   Chassis.turnAngle(-43_deg);
    loadf();
-   Chassis.moveDistance(37.5_in);
-   pros::Task::delay(50);
+   Chassis.moveDistance(40_in);
    stopLoader();
-   Chassis.moveDistance(6_in);
 
-   Chassis.turnAngle(-77_deg);
+   Chassis.moveDistance(-42_in);
+   Chassis.turnAngle(90_deg);
 
-   LoadServ2.move(-127);
-   Chassis.setMaxVelocity(150);
-   Chassis.moveDistance(17_in);
-   LoadServ2.move(0);
+   Chassis.moveDistance(24_in);
 
-   Chassis.setMaxVelocity(150);
-   Chassis.moveDistance(-52_in);
-
+   Chassis.turnAngle(90_deg);
+Chassis.setMaxVelocity(150);
+   Chassis.moveDistance(-44_in);
  }
 
 
 static void FAR_RED()
 {
-  shootS(1, 425);
-  LoadServ2.move(127);
-  Chassis.moveDistance(44_in);
-  stopLoader();
+  shootS(4000, 460);
 
-  Chassis.turnAngle(-80_deg);
-
-  vision_READ(B_FLAG, 0, 20, true);
-
-  LoadServ.move(127);
-  pros::Task::delay(500);
-  stopLoader();
-
-  shootS(2000, 480);
-
+  load(500);
+  Chassis.setMaxVelocity(150);
+  Chassis.turnAngle(60_deg);
   loadf();
+  Chassis.moveDistance(40_in);
+  stopLoader();
+
+  Chassis.moveDistance(-42_in);
+  Chassis.turnAngle(-90_deg);
+
+  Chassis.moveDistance(26_in);
+
+  Chassis.turnAngle(-90_deg);
+  Chassis.setMaxVelocity(150);
+  Chassis.moveDistance(-46_in);
 }
 
 
 static void CLOSE_BLUE()
 {
-  shootS(1, 480);
+  shootS(1, 500);
 
   Chassis.setMaxVelocity(130);
   Chassis.moveDistance(44_in);
-  Chassis.moveDistance(-42_in);
+  Chassis.moveDistance(-48_in);
+  Chassis.turnAngle(-8_deg);
+  //vision_READ(R_FLAG, -20, -5, true);
 
-  vision_READ(R_FLAG, -20, -5, false);
 
   load(500);
-
+Chassis.moveDistance(6_in);
   Chassis.moveDistance(-8_in);
   Chassis.turnAngle(-80_deg);
   loadf();
@@ -160,39 +160,39 @@ static void CLOSE_BLUE()
   stopLoader();
 
   Chassis.turnAngle(70_deg);
-  Chassis.moveDistance(14_in);
-  vision_READ(R_FLAG, -20, -5, false);
+  Chassis.moveDistance(26_in);
+  vision_READ(R_FLAG, -20, -5, true);
   load(1000);
-  // Chassis.turnAngle(-10_deg);
+  Chassis.turnAngle(-5_deg);
   Chassis.moveDistance(38_in);
 }
 
 //start at red and move to gray, move forward to back of next tick
 static void CLOSE_RED()
 {
-  shootS(1, 480);
+  shootS(1, 500);
 
   Chassis.setMaxVelocity(130);
   Chassis.moveDistance(44_in);
-  Chassis.moveDistance(-42_in);
+  Chassis.moveDistance(-48_in);
 
   vision_READ(B_FLAG, 0, 20, true);
 
-  load(500);
 
+  load(500);
+Chassis.moveDistance(6_in);
   Chassis.moveDistance(-8_in);
-  Chassis.turnAngle(80_deg);
+  Chassis.turnAngle(82_deg);
   loadf();
   Chassis.moveDistance(42_in);
   stopLoader();
 
   Chassis.turnAngle(-70_deg);
-  Chassis.moveDistance(14_in);
+  Chassis.moveDistance(26_in);
   vision_READ(B_FLAG, 0, 20, true);
   load(1000);
- // Chassis.turnAngle(-10_deg);
+  Chassis.turnAngle(-8_deg);
   Chassis.moveDistance(38_in);
-
 }
 
 //start front of first tick, farthest from flag
@@ -200,98 +200,44 @@ static void CLOSE_RED()
 //back of second tick
 static void skillz()
 {
-  //shoot top top left flag
-  shoot(1);
-  vision_READ(B_FLAG, -5, 20, true);
-  pros::Task::delay(2000);
-  loadf();
-  pros::Task::delay(1250);
-  stopShooter();
-  stopLoader();
+  shootS(1, 500);
 
-  //slow down the chassis to get more accurate turns.
-  Chassis.setMaxVelocity(50);
-  //realign after shooting from an angle
-  Chassis.turnAngle(-8_deg);
-  //speed up the chassis again, we only have a minute after all.
-  Chassis.setMaxVelocity(125);
-  //toggle the bottom left flag after shooting.
-  Chassis.moveDistance(48_in);
-
-  //get out of flag and turn towards cap(first ball)
-  Chassis.moveDistance(-46_in);
-  Chassis.turnAngle(102_deg);
-  //turn on the loader to get the ball and drive for it.
-  loadf();
-  Chassis.moveDistance(38_in);
-  //give time to load
-  pros::Task::delay(100);
-  stopLoader();
-
-  //turn towards flag and move back a bit to get base allignment.
-  Chassis.turnAngle(-79_deg);
-  Chassis.moveDistance(-2_in);
-  //allign with the biggest green object on flag on the x coord.
-//  readV();
-  vision_READ(B_FLAG, -5, 20, true);
-  //reverse to make sure we didn't load to much and the ball will get caught in the fly wheel
-  loadR(100);
-  //shoot and stop the loader and shooter
-  shoot(2000);
-  load(1400);
-  stopLoader();
-  stopShooter();
-
-  //hit the bottom middle flag
-  Chassis.moveDistance(28_in);
-  Chassis.turnAngle(-17_deg);
-  Chassis.setMaxVelocity(140);
-  Chassis.moveDistance(24_in);
-  Chassis.setMaxVelocity(125);
-
-  //get out of flags
-  Chassis.moveDistance(-24_in);
-
-  //turn towards cap to flip and turn on the loader reversed so the robot doesn't eat the cap, then go for it.
-  Chassis.turnAngle(-98_deg);
-  loadfr();
-  Chassis.moveDistance(21_in);
-
-  Chassis.turnAngle(195_deg);
-  Chassis.moveDistance(62_in);
-  Chassis.moveDistance(-3_in);
-
-  Chassis.turnAngle(97_deg);
-  Chassis.moveDistance(20_in);
-  Chassis.turnAngle(95_deg);
-  loadf();
-  Chassis.moveDistance(12_in);
-  pros::Task::delay(100);
-  Chassis.turnAngle(148_deg);
-  loadR(100);
-  vision_READ(B_FLAG, -5, 20, true);
-  shoot(2000);
-  load(1400);
-
-  stopShooter();
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(-12);
-  Chassis.moveDistance(24_in);
-  Chassis.turnAngle(-15_deg);
-  Chassis.moveDistance(8_in);
-
-  Chassis.moveDistance(-24_in);
-  Chassis.turnAngle(-97_deg);
-  Chassis.moveDistance(78_in);
-  Chassis.turnAngle(-97_deg);
+  Chassis.setMaxVelocity(130);
   Chassis.moveDistance(44_in);
-  Chassis.turnAngle(100_deg);
-  Chassis.setMaxVelocity(200);
-  Chassis.moveDistance(-6.5_ft);
+  Chassis.moveDistance(-48_in);
+
+  vision_READ(B_FLAG, 0, 20, true);
+
+
+  load(500);
+Chassis.moveDistance(6_in);
+  Chassis.moveDistance(-8_in);
+  Chassis.turnAngle(85_deg);
+  loadf();
+  Chassis.moveDistance(42_in);
+  stopLoader();
+
+  Chassis.turnAngle(-70_deg);
+  Chassis.moveDistance(30_in);
+  vision_READ(B_FLAG, 0, 20, true);
+  load(1000);
+  Chassis.turnAngle(-10_deg);
+  Chassis.moveDistance(38_in);
+
+  Chassis.moveDistance(-48_in);
+
+  Chassis.turnAngle(-90_deg);
+  Chassis.moveDistance(40_in);
+  Chassis.turnAngle(-90_deg);
+  Chassis.moveDistance(26_in);
+
+  Chassis.turnAngle(90_deg);
+
+  Chassis.moveDistance(-38_in);
 }
 
 
 void autonomous()
 {
-	CLOSE_RED();
+	skillz();
 }
