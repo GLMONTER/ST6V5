@@ -28,11 +28,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/initialize.cpp.o",
-            "src\\initialize.cpp"
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpuk4giell/autonomous.cpp.o",
+            "src\\autonomous.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\initialize.cpp"
+        "file": "src\\autonomous.cpp"
     },
     {
         "arguments": [
@@ -63,11 +63,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/autonomous.cpp.o",
-            "src\\autonomous.cpp"
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpuk4giell/sensors.cpp.o",
+            "src\\sensors.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\autonomous.cpp"
+        "file": "src\\sensors.cpp"
     },
     {
         "arguments": [
@@ -94,7 +94,7 @@
             "-fdiagnostics-color",
             "--std=gnu11",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/seal.c.o",
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpuk4giell/seal.c.o",
             "src\\seal.c"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
@@ -129,7 +129,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/opcontrol.cpp.o",
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpuk4giell/opcontrol.cpp.o",
             "src\\opcontrol.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
@@ -164,10 +164,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/sensors.cpp.o",
-            "src\\sensors.cpp"
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpuk4giell/initialize.cpp.o",
+            "src\\initialize.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\sensors.cpp"
+        "file": "src\\initialize.cpp"
     }
 ]
