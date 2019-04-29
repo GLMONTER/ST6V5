@@ -8,37 +8,6 @@
             "-fno-ms-extensions",
             "-fno-ms-compatibility",
             "-fno-delayed-template-parsing",
-            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/include",
-            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/include-fixed",
-            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include",
-            "-iquote./include",
-            "-iquote./include/./",
-            "-mcpu=cortex-a9",
-            "-mfpu=neon-fp16",
-            "-mfloat-abi=softfp",
-            "-D_POSIX_THREADS",
-            "-D_UNIX98_THREAD_MUTEX_ATTRIBUTES",
-            "-Os",
-            "-ffunction-sections",
-            "-fdata-sections",
-            "-fdiagnostics-color",
-            "--std=gnu11",
-            "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpibh2azhv/seal.c.o",
-            "src\\seal.c"
-        ],
-        "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\seal.c"
-    },
-    {
-        "arguments": [
-            "clang++",
-            "-c",
-            "-target",
-            "armv7ar-none-none-eabi",
-            "-fno-ms-extensions",
-            "-fno-ms-compatibility",
-            "-fno-delayed-template-parsing",
             "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1",
             "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/arm-none-eabi/thumb/v7-ar/fpv3/softfp",
             "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include/c++/7.2.1/backward",
@@ -59,7 +28,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpibh2azhv/initialize.cpp.o",
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/initialize.cpp.o",
             "src\\initialize.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
@@ -94,11 +63,42 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpibh2azhv/sensors.cpp.o",
-            "src\\sensors.cpp"
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/autonomous.cpp.o",
+            "src\\autonomous.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\sensors.cpp"
+        "file": "src\\autonomous.cpp"
+    },
+    {
+        "arguments": [
+            "clang++",
+            "-c",
+            "-target",
+            "armv7ar-none-none-eabi",
+            "-fno-ms-extensions",
+            "-fno-ms-compatibility",
+            "-fno-delayed-template-parsing",
+            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/include",
+            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/include-fixed",
+            "-isystemc:\\users\\tad keller\\appdata\\local\\programs\\pros\\toolchain\\usr\\bin\\../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/include",
+            "-iquote./include",
+            "-iquote./include/./",
+            "-mcpu=cortex-a9",
+            "-mfpu=neon-fp16",
+            "-mfloat-abi=softfp",
+            "-D_POSIX_THREADS",
+            "-D_UNIX98_THREAD_MUTEX_ATTRIBUTES",
+            "-Os",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-fdiagnostics-color",
+            "--std=gnu11",
+            "-o",
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/seal.c.o",
+            "src\\seal.c"
+        ],
+        "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
+        "file": "src\\seal.c"
     },
     {
         "arguments": [
@@ -129,7 +129,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/opcontrol.cpp.o",
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/opcontrol.cpp.o",
             "src\\opcontrol.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
@@ -164,10 +164,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/autonomous.cpp.o",
-            "src\\autonomous.cpp"
+            "C:/Users/TADKEL~1/AppData/Local/Temp/tmpkpglrnq8/sensors.cpp.o",
+            "src\\sensors.cpp"
         ],
         "directory": "C:\\Users\\Tad Keller\\Documents\\ST6V5",
-        "file": "src\\autonomous.cpp"
+        "file": "src\\sensors.cpp"
     }
 ]
