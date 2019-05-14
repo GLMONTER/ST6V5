@@ -82,6 +82,9 @@ using namespace okapi;
    fly2.move_velocity(speed);
    pros::Task::delay(mili);
  }
+ //our max potential value
+float Ku = 0.0125;
+float Tu = 1.0f;
 
 //the robot chassis, okapi lib uses this data for the Chassis functions like moveDistance
  static auto Chassis = ChassisControllerFactory::create
@@ -90,6 +93,10 @@ using namespace okapi;
    {11, 12},
    //right drive train, reversed hence the -
    {-20, -19},
+
+  IterativePosPIDController::Gains{0.0015, 0, 0.0000},
+  IterativePosPIDController::Gains{0.0015, 0, 0.0000},
+  IterativePosPIDController::Gains{Ku, 0, 0.00005},
    //the motors are using the green gearset.
    AbstractMotor::gearset::green,
    //the wheel diameter is 4.125 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
@@ -239,5 +246,6 @@ Chassis.moveDistance(6_in);
 
 void autonomous()
 {
-	FAR_RED();
+  Chassis.setMaxVelocity(100);
+	Chassis.turnAngle(90_deg);
 }
