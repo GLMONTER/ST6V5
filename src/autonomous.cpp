@@ -1,5 +1,6 @@
 #include "main.h"
 #include"sensors.hpp"
+#include<initializer_list>
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -15,6 +16,7 @@ pros::vision_signature_s_t B_FLAG = pros::Vision::signature_from_utility(2, -346
 pros::vision_signature_s_t R_FLAG = pros::Vision::signature_from_utility(1, 7505, 11963, 9734, -541, 1, -270, 3.5, 0);
 
 using namespace okapi;
+
 
 //load forever until stopped with stopLoader() or manually.
  static void loadf()
@@ -94,14 +96,14 @@ float Tu = 1.0f;
    //right drive train, reversed hence the -
    {-20, -19},
 
-  IterativePosPIDController::Gains{0.0015, 0, 0.0000},
-  IterativePosPIDController::Gains{0.0015, 0, 0.0000},
-  IterativePosPIDController::Gains{Ku, 0, 0.00005},
    //the motors are using the green gearset.
    AbstractMotor::gearset::green,
    //the wheel diameter is 4.125 in, the chassis from middle of wheel to middle of wheel horizontally is 14.5 in
    {4.125_in, 14_in}
  );
+
+ static auto controller = AsyncControllerFactory::motionProfile(1.0, 2.0, 10.0, Chassis);
+ 
  //left of 4, back of 5
  static void FAR_BLUE()
  {
@@ -246,6 +248,7 @@ Chassis.moveDistance(6_in);
 
 void autonomous()
 {
+  controller.generatePath({Point{0_ft, 0_ft, 0_deg}, Point{1_ft, 0_ft, 0_deg}}, "A");
   Chassis.setMaxVelocity(100);
-	Chassis.turnAngle(90_deg);
+	controller.setTarget("A");
 }
